@@ -55,7 +55,7 @@ const Header = () => {
 				<SubMenu
 					key='SubMenu'
 					icon={<LoginOutlined />}
-					title='Dashboard'
+					title={(user.name && user.name) || (user.email && user.email)}
 					className='float-right'
 				>
 					<Item key='setting:1'>Option 1</Item>

@@ -2,22 +2,33 @@
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useSelector, connect } from 'react-redux';
 import { auth } from '../../firebase';
+import PropTypes from 'prop-types';
 
-const RegisterComplete = ({ history }) => {
+import { createOrUpdateUser } from '../../actions/auth';
+
+const RegisterComplete = ({ history, createOrUpdateUser }) => {
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
 	});
+	const [loading, setLoading] = useState(false);
+
+	const { user } = useSelector((state) => ({ ...state }));
+
+	useEffect(() => {
+		if (user && user.token) history.push('/');
+	}, [user, history]);
 
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 	const { email, password } = formData;
 
-	const clearFormData = () => {
-		setFormData({ email: '', password: '' });
-	};
+	// const clearFormData = () => {
+	// 	setFormData({ email: '', password: '' });
+	// };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -31,6 +42,7 @@ const RegisterComplete = ({ history }) => {
 			return;
 		}
 		try {
+			setLoading(true);
 			const result = await auth.signInWithEmailLink(
 				email,
 				window.location.href
@@ -40,11 +52,16 @@ const RegisterComplete = ({ history }) => {
 				let user = auth.currentUser;
 				await user.updatePassword(password);
 				const idTokenResult = await user.getIdTokenResult();
+
+				await createOrUpdateUser(idTokenResult.token, history);
+				setLoading(false);
+				//clearFormData();
+				history.push('/');
 			}
 		} catch (err) {
+			setLoading(false);
 			toast.error(err.message);
 		}
-		clearFormData();
 	};
 
 	useEffect(() => {
@@ -83,7 +100,7 @@ const RegisterComplete = ({ history }) => {
 			</div>
 
 			<br />
-			<button type='submit' className='btn btn-raised'>
+			<button type='submit' className='btn btn-raised' disabled={loading}>
 				Complete Registration
 			</button>
 		</form>
@@ -101,4 +118,8 @@ const RegisterComplete = ({ history }) => {
 	);
 };
 
-export default RegisterComplete;
+RegisterComplete.propTypes = {
+	createOrUpdateUser: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createOrUpdateUser })(RegisterComplete);

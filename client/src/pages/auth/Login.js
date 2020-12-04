@@ -1,16 +1,17 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { auth, googleAuthProvider } from '../../firebase';
 import { Link } from 'react-router-dom';
 import { Button } from 'antd';
 import { MailOutlined, GoogleOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
 
-import { LOGGED_IN_USER } from '../../actions/types';
+import { createOrUpdateUser } from '../../actions/auth';
 
-const Login = ({ history }) => {
+const Login = ({ history, createOrUpdateUser }) => {
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -23,15 +24,14 @@ const Login = ({ history }) => {
 		if (user && user.token) history.push('/');
 	}, [user, history]);
 
-	const dispatch = useDispatch();
 	const onChange = (e) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value });
 	};
 	const { email, password } = formData;
 
-	const clearFormData = () => {
-		setFormData({ email: '', password: '' });
-	};
+	// const clearFormData = () => {
+	// 	setFormData({ email: '', password: '' });
+	// };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -46,15 +46,10 @@ const Login = ({ history }) => {
 
 			const { user } = result;
 			const idTokenResult = await user.getIdTokenResult();
-			dispatch({
-				type: LOGGED_IN_USER,
-				payload: {
-					email: user.email,
-					token: idTokenResult.token,
-				},
-			});
-			clearFormData();
-			history.push('/');
+
+			await createOrUpdateUser(idTokenResult.token, history);
+
+			//clearFormData();
 		} catch (err) {
 			setLoading(false);
 			console.log(err);
@@ -66,15 +61,10 @@ const Login = ({ history }) => {
 		const result = await auth.signInWithPopup(googleAuthProvider);
 		const { user } = result;
 		const idTokenResult = await user.getIdTokenResult();
-		dispatch({
-			type: LOGGED_IN_USER,
-			payload: {
-				email: user.email,
-				token: idTokenResult.token,
-			},
-		});
-		clearFormData();
-		history.push('/');
+
+		await createOrUpdateUser(idTokenResult.token, history);
+
+		//clearFormData();
 	};
 
 	const loginForm = () => (
@@ -140,5 +130,8 @@ const Login = ({ history }) => {
 		</div>
 	);
 };
+Login.propTypes = {
+	createOrUpdateUser: PropTypes.func.isRequired,
+};
 
-export default Login;
+export default connect(null, { createOrUpdateUser })(Login);
