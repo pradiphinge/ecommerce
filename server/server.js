@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import morgan from 'morgan';
 
 import authRouter from './routes/auth.js';
+import categoryRouter from './routes/category.js';
 
 dotEnv.config();
 
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 });
 // Define routes
 app.use('/api/v1', authRouter);
+app.use('/api/v1', categoryRouter);
 
 const PORT = process.env.PORT || 5000;
 
