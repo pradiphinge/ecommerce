@@ -8,6 +8,7 @@ import morgan from 'morgan';
 
 import authRouter from './routes/auth.js';
 import categoryRouter from './routes/category.js';
+import subCategoryRouter from './routes/subcategory.js';
 
 dotEnv.config();
 
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 // Define routes
 app.use('/api/v1', authRouter);
 app.use('/api/v1', categoryRouter);
+app.use('/api/v1', subCategoryRouter);
 
 const PORT = process.env.PORT || 5000;
 

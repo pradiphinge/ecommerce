@@ -21,10 +21,12 @@ import AdminRoute from './components/routes/AdminRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import CategoryCreate from './pages/admin/category/CategoryCreate';
 import CategoryUpdate from './pages/admin/category/CategoryUpdate';
+import SubCategoryCreate from './pages/admin/subcategory/SubCategoryCreate';
 
 import { auth } from './firebase';
 import { LOGGED_IN_USER } from './actions/types';
 import { getCurrentUser } from './actions/auth';
+import SubCategoryUpdate from './pages/admin/subcategory/SubCategoryUpdate';
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -69,6 +71,16 @@ const App = () => {
 					exact
 					path='/admin/category/:slug'
 					component={CategoryUpdate}
+				/>
+				<AdminRoute
+					exact
+					path='/admin/subcategory'
+					component={SubCategoryCreate}
+				/>
+				<AdminRoute
+					exact
+					path='/admin/subcategory/:slug'
+					component={SubCategoryUpdate}
 				/>
 			</Switch>
 		</>

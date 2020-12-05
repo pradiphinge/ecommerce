@@ -11,7 +11,7 @@ const CategoryForm = ({ handleSubmit, name, setName, loading }) => {
 					type='text'
 					id='name'
 					name='name'
-					placeholder='New Category'
+					placeholder='name'
 					className='form-control'
 					value={name}
 					onChange={(e) => setName(e.target.value)}
