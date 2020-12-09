@@ -31,7 +31,7 @@ export const updateCategory = async (slug, category, authtoken) => {
 };
 
 export const createCategory = async (category, authtoken) => {
-	return await axios.post(`${process.env.REACT_APP_API}/category/`, category, {
+	return await axios.post(`${process.env.REACT_APP_API}/category`, category, {
 		headers: {
 			'Content-Type': 'application/json',
 			authtoken,

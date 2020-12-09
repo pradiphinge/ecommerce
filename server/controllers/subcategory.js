@@ -79,3 +79,18 @@ export const list = async (req, res) => {
 		res.status(500).send('Server Error');
 	}
 };
+export const subCatByCat = async (req, res) => {
+	try {
+		const subcategoryList = await SubCategory.find({ parent: req.params.c_id })
+			.sort({ createdAt: -1 })
+			.exec();
+		res.status(200).json(subcategoryList);
+	} catch (err) {
+		console.log('Error sending subcatbycat', err);
+		console.log(err.name);
+		if (err.name === 'CastError') {
+			res.status(400).json({ err: 'Incorrect Category Passed' });
+		}
+		res.status(500).send('Server Error');
+	}
+};

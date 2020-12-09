@@ -5,11 +5,12 @@ import cors from 'cors';
 import dotEnv from 'dotenv';
 import connectDB from './config/db.js';
 import morgan from 'morgan';
-
+import bodyParser from 'body-parser';
 import authRouter from './routes/auth.js';
 import categoryRouter from './routes/category.js';
 import subCategoryRouter from './routes/subcategory.js';
-
+import productRouter from './routes/product.js';
+import imageRouter from './routes/cloudinary.js';
 dotEnv.config();
 
 const app = express();
@@ -18,8 +19,10 @@ const app = express();
 connectDB();
 //Init middlewares
 app.use(morgan('dev'));
+
 app.use(cors());
-app.use(express.json({ exptended: false }));
+
+app.use(bodyParser.json({ limit: '5mb' }));
 
 //routes
 //API Home
@@ -32,6 +35,8 @@ app.get('/', (req, res) => {
 app.use('/api/v1', authRouter);
 app.use('/api/v1', categoryRouter);
 app.use('/api/v1', subCategoryRouter);
+app.use('/api/v1', productRouter);
+app.use('/api/v1', imageRouter);
 
 const PORT = process.env.PORT || 5000;
 

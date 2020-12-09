@@ -21,6 +21,7 @@ const CategoryCreate = () => {
 	const [loading, setLoading] = useState(false);
 	const [categories, setCategories] = useState([]);
 	const [keyword, setKeyword] = useState('');
+
 	const loadCategories = useCallback(
 		() => getCategories().then((c) => setCategories(c.data)),
 		[]

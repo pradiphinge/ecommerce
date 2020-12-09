@@ -5,7 +5,11 @@ import axios from 'axios';
 export const getSubCategories = async () => {
 	return await axios.get(`${process.env.REACT_APP_API}/subcategories`);
 };
-
+export const getSubCategoriesOfCategory = async (c_id) => {
+	return await axios.get(
+		`${process.env.REACT_APP_API}/subcategories/category/${c_id}`
+	);
+};
 export const getSubCategory = async (slug) => {
 	return await axios.get(`${process.env.REACT_APP_API}/subcategory/${slug}`);
 };
