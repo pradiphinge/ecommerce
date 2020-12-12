@@ -53,25 +53,27 @@ const ProductForm = ({
 				</select>
 			</div>
 
-			<div>
-				<label>Sub Categories</label>
-				<Select
-					mode='multiple'
-					style={{ width: '100%' }}
-					placeholder='Please select'
-					value={formData.subcategories}
-					onChange={(value) =>
-						setFormData({ ...formData, subcategories: value })
-					}
-				>
-					{subOptions.length &&
-						subOptions.map((s) => (
-							<Option key={s._id} value={s._id}>
-								{s.name}
-							</Option>
-						))}
-				</Select>
-			</div>
+			{showSubs && (
+				<div>
+					<label>Sub Categories</label>
+					<Select
+						mode='multiple'
+						style={{ width: '100%' }}
+						placeholder='Please select'
+						value={formData.subcategories}
+						onChange={(value) =>
+							setFormData({ ...formData, subcategories: value })
+						}
+					>
+						{subOptions.length &&
+							subOptions.map((s) => (
+								<Option key={s._id} value={s._id}>
+									{s.name}
+								</Option>
+							))}
+					</Select>
+				</div>
+			)}
 
 			<div className='form-group'>
 				<label>Price</label>
@@ -137,7 +139,6 @@ const ProductForm = ({
 						</option>
 					))}
 				</select>
-				{subOptions ? subOptions.length : 'no subs yet'}
 			</div>
 			<button className='btn btn-outline-info'>Save</button>
 		</form>

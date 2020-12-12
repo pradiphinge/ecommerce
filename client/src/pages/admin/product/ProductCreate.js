@@ -31,7 +31,7 @@ const initialState = {
 	brand: '',
 };
 
-const ProductCreate = () => {
+const ProductCreate = ({ history }) => {
 	const [formData, setFormData] = useState(initialState);
 	const [subOptions, setSubOptions] = useState([]);
 	const [showSubs, setShowSubs] = useState(false);
@@ -61,8 +61,13 @@ const ProductCreate = () => {
 		getSubCategoriesOfCategory(e.target.value)
 			.then((res) => {
 				console.log(res);
-				setSubOptions(res.data);
-				setShowSubs(true);
+				if (res.data.length) {
+					setSubOptions(res.data);
+					setShowSubs(true);
+				} else {
+					setSubOptions([]);
+					setShowSubs(false);
+				}
 			})
 			.catch((err) => {
 				setShowSubs(false);
@@ -94,7 +99,7 @@ const ProductCreate = () => {
 				<div className='col-md-10'>
 					<h4>Create Product</h4>
 					<hr />
-					{JSON.stringify(formData.images)}
+
 					<div className='p-3'>
 						<FileUpload
 							formData={formData}
@@ -114,7 +119,6 @@ const ProductCreate = () => {
 					/>
 				</div>
 			</div>
-			∂
 		</div>
 	);
 };

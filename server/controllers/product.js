@@ -5,7 +5,13 @@ import slugify from 'slugify';
 import Product from '../models/Product.js';
 
 export const list = async (req, res) => {
-	const products = await Product.find().sort({ createdAt: -1 });
+	const products = await Product.find()
+		.limit(parseInt(req.params.count))
+		.populate('category')
+		.populate('subcategories')
+		.sort({ createdAt: -1 })
+		.exec();
+
 	res.status(200).json(products);
 };
 
@@ -25,5 +31,16 @@ export const create = async (req, res) => {
 		} else {
 			res.status(400).send('create product failed.');
 		}
+	}
+};
+
+export const remove = async (req, res) => {
+	try {
+		const deleted = await Product.findOneAndDelete({ slug: req.params.slug });
+		console.log(deleted);
+		res.json(deleted);
+	} catch (err) {
+		console.log(err);
+		return res.status(400).send('Product deletion failed');
 	}
 };
