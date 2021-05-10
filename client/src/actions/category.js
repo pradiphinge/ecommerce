@@ -1,39 +1,33 @@
 /** @format */
 
-import axios from 'axios';
+import api from '../utils/api';
 
 export const getCategories = async () => {
-	return await axios.get(`${process.env.REACT_APP_API}/categories`);
+	return await api.get(`/categories`);
 };
 
 export const getCategory = async (slug) => {
-	return await axios.get(`${process.env.REACT_APP_API}/category/${slug}`);
+	return await api.get(`/category/${slug}`);
 };
 
 export const removeCategory = async (slug, authtoken) => {
-	return await axios.delete(`${process.env.REACT_APP_API}/category/${slug}`, {
+	return await api.delete(`/category/${slug}`, {
 		headers: {
 			authtoken,
 		},
 	});
 };
 export const updateCategory = async (slug, category, authtoken) => {
-	return await axios.put(
-		`${process.env.REACT_APP_API}/category/${slug}`,
-		category,
-		{
-			headers: {
-				'Content-Type': 'application/json',
-				authtoken,
-			},
-		}
-	);
+	return await api.put(`/category/${slug}`, category, {
+		headers: {
+			authtoken,
+		},
+	});
 };
 
 export const createCategory = async (category, authtoken) => {
-	return await axios.post(`${process.env.REACT_APP_API}/category`, category, {
+	return await api.post(`/category`, category, {
 		headers: {
-			'Content-Type': 'application/json',
 			authtoken,
 		},
 	});

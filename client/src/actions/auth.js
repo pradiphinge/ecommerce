@@ -1,13 +1,14 @@
 /** @format */
 
-import axios from 'axios';
-import { LOGGED_IN_USER } from './types';
+import { LOGGED_IN_USER, LOGOUT } from './types';
 import { toast } from 'react-toastify';
+import firebase from 'firebase/app';
+import api from '../utils/api';
 
-export const createOrUpdateUser = (authToken, history) => async (dispatch) => {
+export const createOrUpdateUser = (authToken) => async (dispatch) => {
 	try {
-		const res = await axios.post(
-			`${process.env.REACT_APP_API}/auth`,
+		const res = await api.post(
+			'/auth',
 			{},
 			{
 				headers: {
@@ -26,11 +27,11 @@ export const createOrUpdateUser = (authToken, history) => async (dispatch) => {
 				_id: res.data._id,
 			},
 		});
-		if (res.data.role === 'admin') {
-			history.push('/admin/dashboard');
-		} else {
-			history.push('/user/history');
-		}
+		// if (res.data.role === 'admin') {
+		// 	history.push('/admin/dashboard');
+		// } else {
+		// 	history.push('/user/history');
+		// }
 	} catch (err) {
 		console.log(err);
 		toast.error('Server went bananas!');
@@ -38,8 +39,8 @@ export const createOrUpdateUser = (authToken, history) => async (dispatch) => {
 };
 
 export const getCurrentUser = async (authToken) => {
-	return await axios.post(
-		`${process.env.REACT_APP_API}/auth/currentUser`,
+	return await api.post(
+		`/auth/currentUser`,
 		{},
 		{
 			headers: {
@@ -49,8 +50,8 @@ export const getCurrentUser = async (authToken) => {
 	);
 };
 export const getAdmin = async (authToken) => {
-	return await axios.post(
-		`${process.env.REACT_APP_API}/auth/admin`,
+	return await api.post(
+		`/auth/admin`,
 		{},
 		{
 			headers: {
@@ -58,4 +59,12 @@ export const getAdmin = async (authToken) => {
 			},
 		}
 	);
+};
+
+export const logout = () => async (dispatch) => {
+	firebase.auth().signOut();
+	dispatch({
+		type: LOGOUT,
+		payload: null,
+	});
 };

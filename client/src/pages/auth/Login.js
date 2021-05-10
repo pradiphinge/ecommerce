@@ -57,6 +57,13 @@ const Login = ({ history, createOrUpdateUser }) => {
 		}
 	};
 
+	const handleKeypress = (e) => {
+		//it triggers by pressing the enter key
+		if (e.keyCode === 13) {
+			console.log('enter key pressed');
+			handleSubmit(e);
+		}
+	};
 	const googleLogin = async () => {
 		const result = await auth.signInWithPopup(googleAuthProvider);
 		const { user } = result;
@@ -78,6 +85,7 @@ const Login = ({ history, createOrUpdateUser }) => {
 					value={email}
 					onChange={(e) => onChange(e)}
 					autoFocus
+					onKeyDown={(e) => handleKeypress(e)}
 				/>
 			</div>
 			<div className='form-group'>
@@ -88,6 +96,7 @@ const Login = ({ history, createOrUpdateUser }) => {
 					placeholder='Password'
 					value={password}
 					onChange={(e) => onChange(e)}
+					onKeyDown={(e) => handleKeypress(e)}
 				/>
 			</div>
 
